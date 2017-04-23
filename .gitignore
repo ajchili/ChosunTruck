@@ -370,3 +370,9 @@ build/
 
 # pyc files
 *.pyc
+
+linux/
+
+*.sln
+
+*.vcxproj
