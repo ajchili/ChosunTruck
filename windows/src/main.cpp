@@ -19,7 +19,8 @@ using namespace std;
 
 void Thinning(Mat input, int row, int col);
 
-void GetDesktopResolution(int& monitorWidth, int& monitorHeight) {
+void GetDesktopResolution(int& monitorWidth, int& monitorHeight)
+{
 	RECT desktop;
 	const HWND hDesktop = GetDesktopWindow();
 	GetWindowRect(hDesktop, &desktop);
@@ -27,7 +28,8 @@ void GetDesktopResolution(int& monitorWidth, int& monitorHeight) {
 	monitorHeight = desktop.bottom;
 }
 
-void GetGameResolution(int& width, int& height) {
+void GetGameResolution(int& width, int& height)
+{
 	RECT windowsize;
 	const HWND hWnd = FindWindow("prism3d", NULL);
 	GetClientRect(hWnd, &windowsize);
@@ -35,7 +37,8 @@ void GetGameResolution(int& width, int& height) {
 	height = windowsize.bottom;
 }
 
-void detectPause() {
+void detectPause()
+{
 	// Press '+' to pause
 	if (GetAsyncKeyState(VK_OEM_PLUS) & 0x8000)
 	{
@@ -50,7 +53,8 @@ void detectPause() {
 	}
 }
 
-int main() {
+int main()
+{
 	int width = 0, height = 0;
 	int monitorWidth = 0, monitorHeight = 0;
 	long long int sum = 0;

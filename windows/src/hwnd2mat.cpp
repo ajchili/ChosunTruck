@@ -12,7 +12,8 @@
 using namespace cv;
 using namespace std;
 
-Mat hwnd2mat(HWND hwnd) {
+Mat hwnd2mat(HWND hwnd)
+{
 	Mat src;
 	BITMAPINFOHEADER bi;
 

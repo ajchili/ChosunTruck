@@ -5,7 +5,8 @@
 using namespace std;
 #define M_PI 3.14159265358979323846
 
-void createFilter(double gKernel[][2]) {
+void createFilter(double gKernel[][2])
+{
 	// set standard deviation to 1.0
 	double sigma = 1.0;
 	double s = 2.0 * sigma * sigma;

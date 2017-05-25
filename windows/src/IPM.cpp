@@ -5,7 +5,8 @@ using namespace std;
 
 // Public
 IPM::IPM(const cv::Size& _origSize, const cv::Size& _dstSize, const std::vector<cv::Point2f>& _origPoints, const std::vector<cv::Point2f>& _dstPoints)
-	: m_origSize(_origSize), m_dstSize(_dstSize), m_origPoints(_origPoints), m_dstPoints(_dstPoints) {
+	: m_origSize(_origSize), m_dstSize(_dstSize), m_origPoints(_origPoints), m_dstPoints(_dstPoints)
+{
 	assert( m_origPoints.size() == 4 && m_dstPoints.size() == 4 && "Orig. points and Dst. points must vectors of 4 points" );
 	m_H = getPerspectiveTransform(m_origPoints, m_dstPoints);
 	m_H_inv = m_H.inv();
@@ -13,7 +14,8 @@ IPM::IPM(const cv::Size& _origSize, const cv::Size& _dstSize, const std::vector<
 	createMaps();
 }
 
-void IPM::drawPoints(const std::vector<cv::Point2f>& _points, cv::Mat& _img) const {
+void IPM::drawPoints(const std::vector<cv::Point2f>& _points, cv::Mat& _img) const
+{
 	assert(_points.size() == 4);
 
 	line(_img, Point(static_cast<int>(_points[0].x), static_cast<int>(_points[0].y)), Point(static_cast<int>(_points[3].x), static_cast<int>(_points[3].y)), CV_RGB( 205,205,0), 2);
@@ -27,30 +29,36 @@ void IPM::drawPoints(const std::vector<cv::Point2f>& _points, cv::Mat& _img) con
 	}
 }
 
-void IPM::getPoints(vector<Point2f>& _origPts, vector<Point2f>& _ipmPts) {
+void IPM::getPoints(vector<Point2f>& _origPts, vector<Point2f>& _ipmPts)
+{
 	_origPts = m_origPoints;
 	_ipmPts = m_dstPoints;
 }
 
-void IPM::applyHomography(const Mat& _inputImg, Mat& _dstImg, int _borderMode) {
+void IPM::applyHomography(const Mat& _inputImg, Mat& _dstImg, int _borderMode)
+{
 	// Generate IPM image from src
 	remap(_inputImg, _dstImg, m_mapX, m_mapY, INTER_LINEAR, _borderMode);//, BORDER_CONSTANT, Scalar(0,0,0,0));
 }
 
-void IPM::applyHomographyInv(const Mat& _inputImg, Mat& _dstImg, int _borderMode) {
+void IPM::applyHomographyInv(const Mat& _inputImg, Mat& _dstImg, int _borderMode)
+{
 	// Generate IPM image from src
 	remap(_inputImg, _dstImg, m_mapX, m_mapY, INTER_LINEAR, _borderMode);//, BORDER_CONSTANT, Scalar(0,0,0,0));
 }
 
-Point2d IPM::applyHomography(const Point2d& _point) {
+Point2d IPM::applyHomography(const Point2d& _point)
+{
 	return applyHomography(_point, m_H);
 }
 
-Point2d IPM::applyHomographyInv(const Point2d& _point) {
+Point2d IPM::applyHomographyInv(const Point2d& _point)
+{
 	return applyHomography(_point, m_H_inv);
 }
 
-Point2d IPM::applyHomography(const Point2d& _point, const Mat& _H) {
+Point2d IPM::applyHomography(const Point2d& _point, const Mat& _H)
+{
 	Point2d ret = Point2d(-1, -1);
 
 	const double u = _H.at<double>(0, 0) * _point.x + _H.at<double>(0, 1) * _point.y + _H.at<double>(0, 2);
@@ -64,15 +72,18 @@ Point2d IPM::applyHomography(const Point2d& _point, const Mat& _H) {
 	return ret;
 }
 
-Point3d IPM::applyHomography(const Point3d& _point) {
+Point3d IPM::applyHomography(const Point3d& _point)
+{
 	return applyHomography(_point, m_H);
 }
 
-Point3d IPM::applyHomographyInv(const Point3d& _point) {
+Point3d IPM::applyHomographyInv(const Point3d& _point)
+{
 	return applyHomography(_point, m_H_inv);
 }
 
-Point3d IPM::applyHomography(const Point3d& _point, const cv::Mat& _H) {
+Point3d IPM::applyHomography(const Point3d& _point, const cv::Mat& _H)
+{
 	Point3d ret = Point3d(-1, -1, 1);
 
 	const double u = _H.at<double>(0, 0) * _point.x + _H.at<double>(0, 1) * _point.y + _H.at<double>(0, 2) * _point.z;
@@ -88,7 +99,8 @@ Point3d IPM::applyHomography(const Point3d& _point, const cv::Mat& _H) {
 }
 
 // Private
-void IPM::createMaps() {
+void IPM::createMaps()
+{
 	// Create remap images
 	m_mapX.create(m_dstSize, CV_32F);
 	m_mapY.create(m_dstSize, CV_32F);

@@ -16,27 +16,32 @@ cv::Point prev_point;
 using namespace cv;
 using namespace std;
 
-void LineFinder::setAccResolution(double dRho, double dTheta) {
+void LineFinder::setAccResolution(double dRho, double dTheta)
+{
 	deltaRho = dRho;
 	deltaTheta = dTheta;
 }
 
-void LineFinder::setMinVote(int minv) {
+void LineFinder::setMinVote(int minv)
+{
 	minVote = minv;
 }
 
-void LineFinder::setLineLengthAndGap(double length, double gap) {
+void LineFinder::setLineLengthAndGap(double length, double gap)
+{
 	minLength = length;
 	maxGap = gap;
 }
 
-std::vector<cv::Vec4i> LineFinder::findLines(cv::Mat& binary) {
+std::vector<cv::Vec4i> LineFinder::findLines(cv::Mat& binary)
+{
 	lines.clear();
 	cv::HoughLinesP(binary, lines, deltaRho, deltaTheta, minVote, minLength, maxGap);
 	return lines;
 }
 
-void LineFinder::drawDetectedLines(cv::Mat& image, cv::Scalar color) {
+void LineFinder::drawDetectedLines(cv::Mat& image, cv::Scalar color)
+{
 	std::vector<cv::Vec4i>::const_iterator it2 = lines.begin();
 
 	while (it2 != lines.end())
