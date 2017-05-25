@@ -1,14 +1,11 @@
 #include "ets2_self_driving.h"
 #include <opencv2/core/core.hpp>
 #include <opencv2/opencv.hpp>
-//#include <opencv2/imageproc/imageproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/core/cuda.hpp>
 #include <opencv2/photo/cuda.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-//#include <opencv2/cudaimgproc.hpp>
-//#include <opencv2/cudafilters.hpp>
-//#include <opencv2/gpu/gpu.hpp>
+
 #include <iostream>
 #include <string>
 
