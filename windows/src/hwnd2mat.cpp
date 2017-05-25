@@ -16,35 +16,30 @@ using namespace cv;
 using namespace std;
 
 Mat hwnd2mat(HWND hwnd) {
-
-	HDC hwindowDC, hwindowCompatibleDC;
-
-	int height, width, srcheight, srcwidth;
-	HBITMAP hbwindow;
 	Mat src;
-	BITMAPINFOHEADER  bi;
+	BITMAPINFOHEADER bi;
 
-	hwindowDC = GetDC(hwnd);
-	hwindowCompatibleDC = CreateCompatibleDC(hwindowDC);
+	HDC hwindowDC = GetDC(hwnd);
+	HDC hwindowCompatibleDC = CreateCompatibleDC(hwindowDC);
 	SetStretchBltMode(hwindowCompatibleDC, COLORONCOLOR);
 
-	RECT windowsize;    // get the height and width of the screen
+	RECT windowsize; // get the height and width of the screen
 	GetClientRect(hwnd, &windowsize);
 
-	srcheight = windowsize.bottom ;// change this to whatever size you want to resize to
-	srcwidth = windowsize.right;
-	height = windowsize.bottom; // change this to whatever size you want to resize to
-	width = windowsize.right;
+	int srcheight = windowsize.bottom;// change this to whatever size you want to resize to
+	int srcwidth = windowsize.right;
+	int height = windowsize.bottom; // change this to whatever size you want to resize to
+	int width = windowsize.right;
 	//height = windowsize.bottom * 0.3125; // change this to whatever size you want to resize to
 	//width = windowsize.right * 0.625;
 
 	src.create(height, width, CV_8UC4);
 
 	// create a bitmap
-	hbwindow = CreateCompatibleBitmap(hwindowDC, width, height);
-	bi.biSize = sizeof(BITMAPINFOHEADER);    //http://msdn.microsoft.com/en-us/library/windows/window/dd183402%28v=vs.85%29.aspx
+	HBITMAP hbwindow = CreateCompatibleBitmap(hwindowDC, width, height);
+	bi.biSize = sizeof(BITMAPINFOHEADER); //http://msdn.microsoft.com/en-us/library/windows/window/dd183402%28v=vs.85%29.aspx
 	bi.biWidth = width;
-	bi.biHeight = -height;  //this is the line that makes it draw upside down or not
+	bi.biHeight = -height; //this is the line that makes it draw upside down or not
 	bi.biPlanes = 1;
 	bi.biBitCount = 32;
 	bi.biCompression = BI_RGB;
@@ -58,10 +53,12 @@ Mat hwnd2mat(HWND hwnd) {
 	SelectObject(hwindowCompatibleDC, hbwindow);
 	// copy from the window device context to the bitmap device context
 	StretchBlt(hwindowCompatibleDC, 0, 0, width, height, hwindowDC, 0, 0, srcwidth, srcheight, SRCCOPY); //change SRCCOPY to NOTSRCCOPY for wacky colors !
-	GetDIBits(hwindowCompatibleDC, hbwindow, 0, height, src.data, (BITMAPINFO *)&bi, DIB_RGB_COLORS);  //copy from hwindowCompatibleDC to hbwindow
+	GetDIBits(hwindowCompatibleDC, hbwindow, 0, height, src.data, (BITMAPINFO *)&bi, DIB_RGB_COLORS); //copy from hwindowCompatibleDC to hbwindow
 
 	// avoid memory leak
-	DeleteObject(hbwindow); DeleteDC(hwindowCompatibleDC); ReleaseDC(hwnd, hwindowDC);
+	DeleteObject(hbwindow);
+	DeleteDC(hwindowCompatibleDC);
+	ReleaseDC(hwnd, hwindowDC);
 
 	return src;
 }

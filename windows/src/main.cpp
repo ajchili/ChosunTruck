@@ -22,8 +22,7 @@ using namespace std;
 
 void Thinning(Mat input, int row, int col);
 
-void GetDesktopResolution(int& monitorWidth, int& monitorHeight)
-{
+void GetDesktopResolution(int& monitorWidth, int& monitorHeight) {
 	RECT desktop;
 	const HWND hDesktop = GetDesktopWindow();
 	GetWindowRect(hDesktop, &desktop);
@@ -31,16 +30,15 @@ void GetDesktopResolution(int& monitorWidth, int& monitorHeight)
 	monitorHeight = desktop.bottom;
 }
 
-void GetGameResolution(int& width, int& height)
-{
+void GetGameResolution(int& width, int& height) {
 	RECT windowsize;
 	const HWND hWnd = FindWindow("prism3d", NULL);
 	GetClientRect(hWnd, &windowsize);
 	width = windowsize.right;
 	height = windowsize.bottom;
 }
-void detectPause()
-{
+
+void detectPause() {
 	// Press '+' to pause
 	if (GetAsyncKeyState(VK_OEM_PLUS) & 0x8000)
 	{
@@ -54,8 +52,8 @@ void detectPause()
 		}
 	}
 }
-int main()
-{
+
+int main() {
 	int width = 0, height = 0;
 	int monitorWidth = 0, monitorHeight = 0;
 	long long int sum = 0;
@@ -96,14 +94,7 @@ int main()
 
 		// IPM object
 		IPM ipm(Size(width, height), Size(width, height), origPoints, dstPoints);
-
-		// Process
-		//clock_t begin = clock();
 		ipm.applyHomography(image, outputImg);
-		//clock_t end = clock();
-		//double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-		//printf("%.2f (ms)\r", 1000 * elapsed_secs);
-		//ipm.drawPoints(origPoints, image);
 
 		cv::Mat gray;
 		cv::Mat blur;
@@ -116,9 +107,6 @@ int main()
 		cv::Sobel(blur, sobel, blur.depth(), 1, 0, 3, 0.5, 127);
 		cv::threshold(sobel, contours, 145, 255, CV_THRESH_BINARY);
 
-		//Thinning(contours, contours.rows, contours.cols);
-		//cv::Canny(gray, contours, 125, 350);
-
 		LineFinder ld;
 		ld.setLineLengthAndGap(20, 120);
 		ld.setMinVote(55);
@@ -126,15 +114,7 @@ int main()
 		std::vector<cv::Vec4i> li = ld.findLines(contours);
 		ld.drawDetectedLines(contours);
 
-		// cv::cvtColor(contours, contours, COLOR_GRAY2RGB);
-		/*
-		auto end = chrono::high_resolution_clock::now();
-		auto dur = end - begin;
-		auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(dur).count();
-		ms++;
-		sum += ms;
-		cout << 1000 / ms << "fps       avr:" << 1000 / (sum / (++i)) << endl;
-		*/
+		// Move and display the output windows
 		imshow("Lines", contours);
 		imshow("Road", outputImg);
 		cv::moveWindow("Lines", monitorWidth / 1.6, monitorHeight / 10.8);
@@ -188,18 +168,15 @@ int main()
 				avr_center_to_right = (avr_center_to_right * count_centerline + center_to_right) / count_centerline + 1;
 				last_centerline = centerline;
 				count_centerline++;
-			}
-			else {}
+			} else {}
 		}
 
-		int diff = 0;
 		pt.x = width / 2;
 		if (count_centerline != 0)
 		{
-			diff = sum_centerline / count_centerline - bottom_center - 25;
+			int diff = sum_centerline / count_centerline - bottom_center - 25;
 
 			// diff_max was determined by finding the maxmimum diff that can be used to go from center to the very edge of the lane.
-			// In testing, 65px was the farthest we could go from center in-game without losing lane.
 			int diff_max = 70;
 
 			// jerk_factor = how fast the wheel will turn
@@ -211,12 +188,10 @@ int main()
 
 			double turn_amount = linearized_diff * jerk_factor;
 
-
 			if (turn_amount < .5)
 			{
 				turn_amount = 0;
-			}
-			else
+			} else
 			{
 				turn_amount = 1;
 			}
@@ -224,6 +199,8 @@ int main()
 			int moveMouse = (pt.x + diffOld + turn_amount);
 			SetCursorPos(moveMouse, height / 2);
 			cout << "Steer: " << diffOld << "px " << endl;
+
+			// Compensate movement for IPM display
 			/*double diffForIPM = (diff - diffOld) / 3;
 			if ((int)diffForIPM == 0) {
 				if (IPM_diff > 0) {

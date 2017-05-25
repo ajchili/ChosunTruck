@@ -3,14 +3,11 @@
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/opencv.hpp>
-//#include <opencv2/imageproc/imageproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/core/cuda.hpp>
 #include <opencv2/photo/cuda.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-//#include <opencv2/cudaimgproc.hpp>
-//#include <opencv2/cudafilters.hpp>
-//#include <opencv2/gpu/gpu.hpp>
+
 #include <Windows.h>
 #include <iostream>
 #include <string>
@@ -18,31 +15,31 @@
 
 #define PI 3.1415926
 
-
 using namespace cv;
 using namespace std;
 
-class LineFinder{
-
+class LineFinder
+{
 private:
-	cv::Mat image; // ¿ø ¿µ»ó
-	std::vector<cv::Vec4i> lines; // ¼±À» °¨ÁöÇÏ±â À§ÇÑ ¸¶Áö¸· Á¡À» Æ÷ÇÔÇÑ º¤ÅÍ
+	cv::Mat image; // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	std::vector<cv::Vec4i> lines; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	double deltaRho;
-	double deltaTheta; // ´©»ê±â ÇØ»óµµ ÆÄ¶ó¹ÌÅÍ
-	int minVote; // ¼±À» °í·ÁÇÏ±â Àü¿¡ ¹Þ¾Æ¾ß ÇÏ´Â ÃÖ¼Ò ÅõÇ¥ °³¼ö
-	double minLength; // ¼±¿¡ ´ëÇÑ ÃÖ¼Ò ±æÀÌ
-	double maxGap; // ¼±¿¡ µû¸¥ ÃÖ´ë Çã¿ë °£°Ý
+	double deltaTheta; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø»ï¿½ï¿½ï¿½ ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ï¿½
+	int minVote; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¾ï¿½ ï¿½Ï´ï¿½ ï¿½Ö¼ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½
+	double minLength; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¼ï¿½ ï¿½ï¿½ï¿½ï¿½
+	double maxGap; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 public:
 	LineFinder::LineFinder() : deltaRho(1), deltaTheta(PI / 180), minVote(50), minLength(50), maxGap(10) {}
-	// ±âº» ´©Àû ÇØ»óµµ´Â 1°¢µµ 1È­¼Ò 
-	// °£°ÝÀÌ ¾ø°í ÃÖ¼Ò ±æÀÌµµ ¾øÀ½
+	// ï¿½âº» ï¿½ï¿½ï¿½ï¿½ ï¿½Ø»óµµ´ï¿½ 1ï¿½ï¿½ï¿½ï¿½ 1È­ï¿½ï¿½ 
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¼ï¿½ ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½
 	void setAccResolution(double dRho, double dTheta);
 	void setMinVote(int minv);
 	void setLineLengthAndGap(double length, double gap);
 	std::vector<cv::Vec4i> findLines(cv::Mat& binary);
-	void drawDetectedLines(cv::Mat &image, cv::Scalar color = cv::Scalar(112, 112, 0));
+	void drawDetectedLines(cv::Mat& image, cv::Scalar color = cv::Scalar(112, 112, 0));
 };
+
 Mat hwnd2mat(HWND hwnd);
 void cudaf();
 
