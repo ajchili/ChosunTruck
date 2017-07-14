@@ -52,15 +52,15 @@ void DetectPause()
 
 int main()
 {
-	int width = 0, height = 0;
+	int gameWidth = 0, gameHeight = 0;
 	int monitorWidth = 0, monitorHeight = 0;
 	int diffOld = 0;
 	
-	GetGameResolution(width, height);
-	double IPM_BOTTOM_RIGHT = width + 400;
+	GetGameResolution(gameWidth, gameHeight);
+	double IPM_BOTTOM_RIGHT = gameWidth + 400;
 	double IPM_BOTTOM_LEFT = -400;
-	double IPM_RIGHT = width / 2 + 100;
-	double IPM_LEFT = width / 2 - 100;
+	double IPM_RIGHT = gameWidth / 2 + 100;
+	double IPM_LEFT = gameWidth / 2 - 100;
 	int IPM_DIFF = 0;
 
 	while (true)
@@ -77,20 +77,20 @@ int main()
 
 		// The 4-points at the input image	
 		vector<cv::Point2f> origPoints;
-		origPoints.push_back(cv::Point2f(IPM_BOTTOM_LEFT, height - 50));
-		origPoints.push_back(cv::Point2f(IPM_BOTTOM_RIGHT, height - 50));
-		origPoints.push_back(cv::Point2f(IPM_RIGHT, height / 2 + 30));
-		origPoints.push_back(cv::Point2f(IPM_LEFT, height / 2 + 30));
+		origPoints.push_back(cv::Point2f(IPM_BOTTOM_LEFT, gameHeight - 50));
+		origPoints.push_back(cv::Point2f(IPM_BOTTOM_RIGHT, gameHeight - 50));
+		origPoints.push_back(cv::Point2f(IPM_RIGHT, gameHeight / 2 + 30));
+		origPoints.push_back(cv::Point2f(IPM_LEFT, gameHeight / 2 + 30));
 
 		// The 4-points correspondences in the destination image
 		vector<cv::Point2f> dstPoints;
-		dstPoints.push_back(cv::Point2f(0, height));
-		dstPoints.push_back(cv::Point2f(width, height));
-		dstPoints.push_back(cv::Point2f(width, 0));
+		dstPoints.push_back(cv::Point2f(0, gameHeight));
+		dstPoints.push_back(cv::Point2f(gameWidth, gameHeight));
+		dstPoints.push_back(cv::Point2f(gameWidth, 0));
 		dstPoints.push_back(cv::Point2f(0, 0));
 
 		// IPM object
-		IPM ipm(cv::Size(width, height), cv::Size(width, height), origPoints, dstPoints);
+		IPM ipm(cv::Size(gameWidth, gameHeight), cv::Size(gameWidth, gameHeight), origPoints, dstPoints);
 		ipm.applyHomography(image, outputImg);
 
 		cv::Mat gray;
@@ -168,7 +168,7 @@ int main()
 			} else {}
 		}
 
-		pt.x = width / 2;
+		pt.x = gameWidth / 2;
 		if (count_centerline != 0)
 		{
 			int diff = sum_centerline / count_centerline - bottom_center - 25;
@@ -194,7 +194,7 @@ int main()
 			}
 
 			int moveMouse = (pt.x + diffOld + turn_amount);
-			SetCursorPos(moveMouse, height / 2);
+			SetCursorPos(moveMouse, gameHeight / 2);
 			cout << "Steer: " << diffOld << "px " << endl;
 
 			double diffForIPM = (diff - diffOld) / 4;
@@ -210,8 +210,8 @@ int main()
 					IPM_DIFF += 1;
 				}
 				else {
-					IPM_RIGHT = width / 2 + 100;
-					IPM_LEFT = width / 2 - 100;
+					IPM_RIGHT = gameWidth / 2 + 100;
+					IPM_LEFT = gameWidth / 2 - 100;
 					IPM_DIFF = 0;
 				}
 			}
