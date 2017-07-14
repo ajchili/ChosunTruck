@@ -9,7 +9,6 @@
 #include <string>
 #include "ets2_self_driving.h"
 
-using namespace cv;
 using namespace std;
 
 Mat hwnd2mat(HWND hwnd)

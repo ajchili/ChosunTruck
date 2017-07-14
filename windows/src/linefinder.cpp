@@ -13,7 +13,6 @@
 
 cv::Point prev_point;
 
-using namespace cv;
 using namespace std;
 
 void LineFinder::setAccResolution(double dRho, double dTheta)

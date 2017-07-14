@@ -15,7 +15,6 @@
 
 #define PI 3.1415926
 
-using namespace cv;
 using namespace std;
 
 class LineFinder
@@ -40,7 +39,7 @@ public:
 	void drawDetectedLines(cv::Mat& image, cv::Scalar color = cv::Scalar(112, 112, 0));
 };
 
-Mat hwnd2mat(HWND hwnd);
+cv::Mat hwnd2mat(HWND hwnd);
 void cudaf();
 
 #endif
