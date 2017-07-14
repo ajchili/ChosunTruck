@@ -17,8 +17,6 @@
 using namespace cv;
 using namespace std;
 
-void Thinning(Mat input, int row, int col);
-
 void GetDesktopResolution(int& monitorWidth, int& monitorHeight)
 {
 	RECT desktop;
@@ -57,9 +55,8 @@ int main()
 {
 	int width = 0, height = 0;
 	int monitorWidth = 0, monitorHeight = 0;
-	long long int sum = 0;
-	long long int i = 0;
 	int diffOld = 0;
+	
 	GetGameResolution(width, height);
 	double IPM_BOTTOM_RIGHT = width + 400;
 	double IPM_BOTTOM_LEFT = -400;
@@ -127,7 +124,6 @@ int main()
 		SetActiveWindow(hWnd);
 		POINT pt;
 		GetCursorPos(&pt);
-		cout << "current mouse pos: " << "x: " << pt.x << "y: " << pt.y << endl;
 
 		int bottom_center = 160;
 		int sum_centerline = 0;
