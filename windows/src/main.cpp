@@ -1,14 +1,10 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui/highgui.hpp>
-#include <opencv2/core/cuda.hpp>
-#include <opencv2/photo/cuda.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
 #include <Windows.h>
 #include <iostream>
-#include <string>
-#include <chrono>
 #include "ets2_self_driving.h"
 #include "IPM.h"
 
@@ -104,7 +100,9 @@ int main()
 		cv::cvtColor(outputImg, gray, cv::COLOR_RGB2GRAY);
 		cv::blur(gray, blur, cv::Size(10, 10));
 		cv::Sobel(blur, sobel, blur.depth(), 1, 0, 3, 0.5, 127);
-		cv::threshold(sobel, contours, 145, 255, CV_THRESH_BINARY);
+		cv::threshold(sobel, contours, 150, 200, CV_THRESH_BINARY);
+
+		// After transformation, lines are approx 37px length and have a 37px gap between each
 		LineFinder ld;
 		ld.setLineLengthAndGap(32, 74);
 		ld.setMinVote(50);
@@ -116,7 +114,7 @@ int main()
 		imshow("Lines", contours);
 		imshow("Road", outputImg);
 		cv::moveWindow("Lines", monitorWidth / 1.6, monitorHeight / 10.8);
-		cv::moveWindow("Road", monitorWidth / 1.2673, monitorHeight / 10.8);
+		cv::moveWindow("Road", monitorWidth / (128.0/101.0), monitorHeight / 10.8);
 		SetWindowPos(consoleWindow, 0, monitorWidth / 1.6, monitorHeight / 2.7, 600, 400, SWP_NOZORDER);
 		SetWindowPos(hWnd, 0, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 		cv::waitKey(1);
@@ -193,11 +191,11 @@ int main()
 				turn_amount = 1;
 			}
 
-			int moveMouse = (pt.x + diffOld + turn_amount);
-			SetCursorPos(moveMouse, gameHeight / 2);
+			int move_mouse = (pt.x + diffOld + turn_amount);
+			SetCursorPos(move_mouse, gameHeight / 2);
 			cout << "Steer: " << diffOld << "px " << endl;
 
-			double diffForIPM = (diff - diffOld) / 4;
+			/*double diffForIPM = (diff - diffOld) / 4;
 			if ((int)diffForIPM == 0) {
 				if (IPM_DIFF > 0) {
 					IPM_RIGHT -= 1;
@@ -230,7 +228,7 @@ int main()
 					}
 				}
 			}
-			cout << IPM_DIFF <<" / " << (int)diffForIPM << endl;
+			cout << IPM_DIFF <<" / " << (int)diffForIPM << endl;*/
 		
 			diffOld = diff;
 		}
